@@ -71,12 +71,15 @@ app.listen(PORT, () => {
 async function getFiles(directory) {
   const entries = await fs.readdir(directory, { withFileTypes: true });
   const files = await Promise.all(entries.map((entry) => {
+    if (entry.name === 'conf.json') { // 过滤掉 conf.json 文件
+      return null;
+    }
     const fullPath = path.join(directory, entry.name);
     if (entry.isDirectory()) {
-      return getFiles(fullPath).then(files => ({ name: entry.name, path: fullPath, files }));
+      return getFiles(fullPath).then(files => ({ name: entry.name, files }));
     } else {
-      return { name: entry.name, path: fullPath };
+      return { name: entry.name };
     }
   }));
-  return files;
+  return files.filter(file => file !== null);
 }
