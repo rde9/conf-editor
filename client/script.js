@@ -16,7 +16,7 @@ require(['vs/editor/editor.main'], function () {
 });
 
 // 获取文件列表
-fetch('/files')
+fetch('files')
   .then(response => response.json())
   .then(files => {
     createFileList(fileList, files, '');
@@ -47,7 +47,7 @@ function createFileList(ul, files, path) {
 
 // 加载文件
 function loadFile(filePath) {
-  fetch(`/files/${filePath}`)
+  fetch(`files/${filePath}`)
     .then(response => response.json())
     .then(data => {
       editor.setValue(data.content);
@@ -60,7 +60,7 @@ saveButton.addEventListener('click', () => {
   console.log(filePath);
   const content = editor.getValue();
 
-  fetch(`/files/${filePath}`, {
+  fetch(`files/${filePath}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ deleteButton.addEventListener('click', () => {
     return;
   }
 
-  fetch(`/files/${filePath}`, {
+  fetch(`files/${filePath}`, {
     method: 'DELETE',
   })
     .then(response => response.text())
